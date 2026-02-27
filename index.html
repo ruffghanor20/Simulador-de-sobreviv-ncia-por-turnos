@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador de Sobrevivência V4</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="panel hero">
+      <div class="hero-text">
+        <h1>Simulador de Sobrevivência por Turnos — V4</h1>
+        <p>
+          Agora com biomas, save slots, objetivos, conquistas e eventos mais contextuais.
+          O sofrimento ficou mais sofisticado. Finalmente.
+        </p>
+      </div>
+
+      <div class="hero-controls">
+        <label>
+          Dificuldade
+          <select id="difficulty">
+            <option value="easy">Fácil</option>
+            <option value="normal" selected>Normal</option>
+            <option value="hard">Difícil</option>
+          </select>
+        </label>
+
+        <label>
+          Bioma
+          <select id="biome">
+            <option value="forest" selected>Floresta</option>
+            <option value="desert">Deserto</option>
+            <option value="tundra">Tundra</option>
+          </select>
+        </label>
+
+        <label>
+          Slot
+          <select id="saveSlot">
+            <option value="1" selected>Slot 1</option>
+            <option value="2">Slot 2</option>
+            <option value="3">Slot 3</option>
+          </select>
+        </label>
+
+        <button id="newGameBtn" class="btn secondary">Novo jogo</button>
+        <button id="loadSlotBtn" class="btn secondary">Carregar slot</button>
+        <button id="saveToSlotBtn" class="btn secondary">Salvar no slot</button>
+        <button id="clearSlotBtn" class="btn danger">Limpar slot</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="left-col">
+        <section class="panel">
+          <div class="overview-grid">
+            <div class="mini-card">
+              <span>Dia</span>
+              <strong id="dayValue">1</strong>
+            </div>
+            <div class="mini-card">
+              <span>Meta</span>
+              <strong id="goalValue">15</strong>
+            </div>
+            <div class="mini-card">
+              <span>Clima</span>
+              <strong id="weatherValue">Claro</strong>
+            </div>
+            <div class="mini-card">
+              <span>Bioma</span>
+              <strong id="biomeValue">Floresta</strong>
+            </div>
+            <div class="mini-card">
+              <span>Abrigo</span>
+              <strong id="shelterValue">0</strong>
+            </div>
+            <div class="mini-card">
+              <span>Fogueira</span>
+              <strong id="fireValue">0</strong>
+            </div>
+            <div class="mini-card">
+              <span>Armadilhas</span>
+              <strong id="trapsValue">0</strong>
+            </div>
+            <div class="mini-card">
+              <span>Slot ativo</span>
+              <strong id="activeSlotValue">1</strong>
+            </div>
+          </div>
+
+          <div id="messageBox" class="message">
+            Escolha uma ação para iniciar a sobrevivência.
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Status</h2>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-top">
+                <span>Saúde</span>
+                <strong id="healthText">100</strong>
+              </div>
+              <div class="bar"><div id="healthBar" class="fill health"></div></div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-top">
+                <span>Energia</span>
+                <strong id="energyText">80</strong>
+              </div>
+              <div class="bar"><div id="energyBar" class="fill energy"></div></div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-top">
+                <span>Moral</span>
+                <strong id="moraleText">70</strong>
+              </div>
+              <div class="bar"><div id="moraleBar" class="fill morale"></div></div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-top">
+                <span>Comida</span>
+                <strong id="foodText">4</strong>
+              </div>
+              <div class="bar"><div id="foodBar" class="fill food"></div></div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-top">
+                <span>Água</span>
+                <strong id="waterText">4</strong>
+              </div>
+              <div class="bar"><div id="waterBar" class="fill water"></div></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Ações do turno</h2>
+
+          <div class="actions-grid">
+            <button class="action-btn" data-action="rest">
+              Descansar
+              <span>Recupera energia. Melhor com cama e abrigo.</span>
+            </button>
+
+            <button class="action-btn" data-action="water">
+              Buscar água
+              <span>Funciona melhor com cantil, purificador e no clima certo.</span>
+            </button>
+
+            <button class="action-btn" data-action="hunt">
+              Caçar
+              <span>Melhora com lança, armadilhas e defumador.</span>
+            </button>
+
+            <button class="action-btn" data-action="wood">
+              Coletar madeira
+              <span>Base para abrigo, fogueira e receitas.</span>
+            </button>
+
+            <button class="action-btn" data-action="forage">
+              Forragear
+              <span>Busca comida leve e fibra.</span>
+            </button>
+
+            <button class="action-btn" data-action="explore">
+              Explorar
+              <span>Alta variância. Pode salvar ou humilhar.</span>
+            </button>
+
+            <button class="action-btn" data-action="buildShelter">
+              Melhorar abrigo
+              <span>Reduz desgaste diário e ajuda em clima ruim.</span>
+            </button>
+
+            <button class="action-btn" data-action="lightFire">
+              Acender fogueira
+              <span>Ajuda no frio, melhora moral e certos eventos.</span>
+            </button>
+          </div>
+
+          <div class="quick-actions">
+            <button id="useMedkitBtn" class="btn secondary">Usar kit médico</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Crafting</h2>
+            <span class="panel-note">Cada receita consome um turno</span>
+          </div>
+
+          <div id="craftGrid" class="craft-grid"></div>
+        </section>
+      </section>
+
+      <aside class="right-col">
+        <section id="eventPanel" class="panel event-panel hidden">
+          <div class="panel-head">
+            <h2 id="eventTitle">Evento</h2>
+            <span class="panel-note">Escolha antes de continuar</span>
+          </div>
+
+          <p id="eventText" class="event-text"></p>
+          <div id="eventChoices" class="event-choices"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Inventário</h2>
+            <span class="panel-note">Recursos atuais</span>
+          </div>
+
+          <div class="inventory-grid">
+            <div class="mini-card">
+              <span>Madeira</span>
+              <strong id="woodInvValue">2</strong>
+            </div>
+            <div class="mini-card">
+              <span>Sucata</span>
+              <strong id="scrapInvValue">1</strong>
+            </div>
+            <div class="mini-card">
+              <span>Fibra</span>
+              <strong id="fiberInvValue">1</strong>
+            </div>
+            <div class="mini-card">
+              <span>Kit médico</span>
+              <strong id="medkitsInvValue">1</strong>
+            </div>
+            <div class="mini-card">
+              <span>Comida</span>
+              <strong id="foodInvValue">4</strong>
+            </div>
+            <div class="mini-card">
+              <span>Água</span>
+              <strong id="waterInvValue">4</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Objetivos secundários</h2>
+            <span class="panel-note">Recompensas automáticas</span>
+          </div>
+
+          <div id="questList" class="stack-list"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Conquistas</h2>
+            <span class="panel-note">Pequenos troféus do caos</span>
+          </div>
+
+          <div id="achievementList" class="stack-list"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Upgrades</h2>
+            <span class="panel-note">Itens construídos</span>
+          </div>
+
+          <div id="upgradeList" class="upgrade-list"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Evolução por dia</h2>
+            <span class="panel-note">Saúde / Energia / Moral</span>
+          </div>
+
+          <div class="chart-wrap">
+            <canvas id="historyChart" width="520" height="220"></canvas>
+          </div>
+
+          <div class="chart-legend">
+            <span><i class="dot health-dot"></i> Saúde</span>
+            <span><i class="dot energy-dot"></i> Energia</span>
+            <span><i class="dot morale-dot"></i> Moral</span>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Registro</h2>
+            <span class="panel-note">Últimos acontecimentos</span>
+          </div>
+
+          <div id="log" class="log"></div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
